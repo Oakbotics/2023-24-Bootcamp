@@ -52,7 +52,7 @@ public class LimelightSubsystem extends SubsystemBase {
     return botPose;
   }
 
-  public Pose2d getAprilTagDistance(){
+  public Pose2d getAprilTagDistanceRobotSpace(){
 
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     double[] botPoseArray = m_limelightTable.getEntry("targetpose_robotspace").getDoubleArray(new double[10]); 
@@ -63,6 +63,17 @@ public class LimelightSubsystem extends SubsystemBase {
    
     return botPose;
   }
+
+  public double getTargetRotation(){
+
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
+    // double[] botPoseArray = m_limelightTable.getEntry("tx").getDoubleArray(new double[10]); 
+
+    // double targetRotation = botPoseArray[5];
+   
+    return m_limelightTable.getEntry("tx").getDouble(0);
+  }
+
 
   @Override
   public void periodic() {
