@@ -9,7 +9,7 @@ import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class TurretRunClockwise extends CommandBase {
+public class TurretRunClockwiseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final TurretSubsystem m_TurretSubsystem;
 
@@ -18,7 +18,7 @@ public class TurretRunClockwise extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurretRunClockwise(TurretSubsystem subsystem) {
+  public TurretRunClockwiseCommand(TurretSubsystem subsystem) {
     m_TurretSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);

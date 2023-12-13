@@ -7,9 +7,10 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TurretFindTargetCommand;
 import frc.robot.commands.TurretLockOnCommand;
-import frc.robot.commands.TurretRunClockwise;
-import frc.robot.commands.TurretRunCounterClockwise;
+import frc.robot.commands.TurretRunClockwiseCommand;
+import frc.robot.commands.TurretRunCounterClockwiseCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -54,10 +55,11 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.rightBumper().whileTrue(new TurretRunClockwise(m_turretSubsystem));
-    m_driverController.leftBumper().whileTrue(new TurretRunCounterClockwise(m_turretSubsystem));
-    m_driverController.x().whileTrue(new TurretLockOnCommand(m_turretSubsystem, m_limelightSubsystem));
-  
+    m_driverController.rightBumper().whileTrue(new TurretRunClockwiseCommand(m_turretSubsystem));
+    m_driverController.leftBumper().whileTrue(new TurretRunCounterClockwiseCommand(m_turretSubsystem));
+    // m_driverController.x().onTrue(new TurretFindTargetCommand(m_turretSubsystem, m_limelightSubsystem));
+      m_driverController.x().whileTrue(new TurretFindTargetCommand(m_turretSubsystem, m_limelightSubsystem).andThen(new TurretLockOnCommand(m_turretSubsystem, m_limelightSubsystem)));
+    m_driverController.y().whileTrue(new TurretLockOnCommand(m_turretSubsystem, m_limelightSubsystem));
   }
 
   /**

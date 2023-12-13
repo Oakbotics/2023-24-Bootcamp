@@ -4,24 +4,27 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.commands.TurretFindTargetCommand;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class TurretRunCounterClockwise extends CommandBase {
+public class TurretFindTargetCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final TurretSubsystem m_TurretSubsystem;
-
+  private final LimelightSubsystem m_LimelightSubsystem;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurretRunCounterClockwise(TurretSubsystem subsystem) {
-    m_TurretSubsystem = subsystem;
+  public TurretFindTargetCommand(TurretSubsystem Turret, LimelightSubsystem Limelight) {
+    m_TurretSubsystem = Turret;
+    m_LimelightSubsystem = Limelight;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_TurretSubsystem);
+    // addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,18 +34,25 @@ public class TurretRunCounterClockwise extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_TurretSubsystem.runTurretSpeed(0.2);
+
+    if(Math.abs(m_LimelightSubsystem.getPoseDiff()+m_LimelightSubsystem.getTargetDegree())>Math.abs(m_LimelightSubsystem.getPoseDiff()-m_LimelightSubsystem.getTargetDegree())){
+        m_TurretSubsystem.runTurretSpeed(1);
+    } 
+    else if(Math.abs(m_LimelightSubsystem.getPoseDiff()+m_LimelightSubsystem.getTargetDegree())<Math.abs(m_LimelightSubsystem.getPoseDiff()-m_LimelightSubsystem.getTargetDegree())){
+        m_TurretSubsystem.runTurretSpeed(-1);
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_TurretSubsystem.runTurretSpeed(0);
-  }
+  } 
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_LimelightSubsystem.getTagWithinSight();
   }
 }

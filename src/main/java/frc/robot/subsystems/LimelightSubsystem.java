@@ -15,6 +15,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.TurretConstants;
 
 public class LimelightSubsystem extends SubsystemBase {
 
@@ -28,9 +30,6 @@ public class LimelightSubsystem extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
 
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-
-
-
 
   }
 
@@ -50,6 +49,14 @@ public class LimelightSubsystem extends SubsystemBase {
     SmartDashboard.putString("Bot pose string thing ", botPose.toString());
    
     return botPose;
+  }
+
+  public double getCurrentAprilTagId(){
+
+    double id = m_limelightTable.getEntry("tid").getDouble(0);
+
+    return id;
+
   }
 
   public Pose2d getAprilTagDistanceRobotSpace(){
@@ -72,8 +79,40 @@ public class LimelightSubsystem extends SubsystemBase {
     // double targetRotation = botPoseArray[5];
    
     return m_limelightTable.getEntry("tx").getDouble(0);
+
   }
 
+  public double getPoseDiff(){
+
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
+    double Yaw = m_limelightTable.getEntry("botpose_wpired").getDoubleArray(new double[10])[5]; 
+    return Yaw;
+
+  } 
+
+
+  public double getTargetDegree(){
+
+
+    double xDistance = TurretConstants.targetPose.getX() - getBotPose().getX();
+    double yDistance = TurretConstants.targetPose.getY() - getBotPose().getY();
+    
+    double optimalDegree = Math.atan(yDistance/xDistance); 
+    return optimalDegree;
+  
+
+  }
+
+  public boolean getTagWithinSight(){
+    if (getCurrentAprilTagId() == -1){
+      return false;
+    }
+    else if (getPoseDiff() <= (getTargetDegree() + 10) && getPoseDiff() >= (getTargetDegree() - 10)){
+      return true;
+    }
+    return false;
+  }
+  
 
   @Override
   public void periodic() {

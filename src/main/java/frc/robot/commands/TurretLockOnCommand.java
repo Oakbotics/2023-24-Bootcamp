@@ -21,7 +21,7 @@ public class TurretLockOnCommand extends PIDCommand {
         // Set reference to target
         0,
         // Pipe output to turn robot
-        output -> turret.runTurretSpeed(-output),
+        output -> turret.runTurretSpeed(output),
         // Require the drive
         limelight, turret);
 

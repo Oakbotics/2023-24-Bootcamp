@@ -23,7 +23,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public void runTurretSpeed(double speed) {
-    turretMotor.set(-speed);
+    turretMotor.set(speed);
   }
 
   /**
