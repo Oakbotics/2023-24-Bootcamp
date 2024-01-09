@@ -22,6 +22,6 @@ public final class Constants {
 
   public static class TurretConstants{
     public static final int turretCANID = 10;
-    public static final Translation2d targetPose = new Translation2d(12,6);
+    public static final Translation2d targetPose = new Translation2d(7,8);
   }
 }

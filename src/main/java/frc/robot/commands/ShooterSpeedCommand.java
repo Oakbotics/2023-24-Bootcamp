@@ -4,28 +4,26 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.commands.TurretFindTargetCommand;
-import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class TurretFindTargetCommand extends CommandBase {
+public class ShooterSpeedCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final TurretSubsystem m_TurretSubsystem;
   private final LimelightSubsystem m_LimelightSubsystem;
+
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurretFindTargetCommand(TurretSubsystem Turret, LimelightSubsystem Limelight) {
-    m_TurretSubsystem = Turret;
-    m_LimelightSubsystem = Limelight;
-
+  public ShooterSpeedCommand(LimelightSubsystem limelightsubsystem) {
+    m_LimelightSubsystem = limelightsubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(subsystem);
+    addRequirements(limelightsubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -35,28 +33,21 @@ public class TurretFindTargetCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // double x = m_LimelightSubsystem.getAprilTagDistanceRobotSpace().getX();
+    // double y =Math.abs(m_LimelightSubsystem.getAprilTagDistanceRobotSpace().getY()); 
 
-    // if(Math.abs(m_LimelightSubsystem.getPoseDiff()+m_LimelightSubsystem.getTargetDegree())>Math.abs(m_LimelightSubsystem.getPoseDiff()-m_LimelightSubsystem.getTargetDegree())){
-    //     m_TurretSubsystem.runTurretSpeed(1);
-    // } 
-    // else if(Math.abs(m_LimelightSubsystem.getPoseDiff()+m_LimelightSubsystem.getTargetDegree())<Math.abs(m_LimelightSubsystem.getPoseDiff()-m_LimelightSubsystem.getTargetDegree())){
-    //     m_TurretSubsystem.runTurretSpeed(-1);
-    // }
+    double d = (m_LimelightSubsystem.getTargetDistance() / 10);
 
-    m_TurretSubsystem.runTurretSpeed(1);
-
+    SmartDashboard.putNumber("Shooting Power", d);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-    m_TurretSubsystem.runTurretSpeed(0);
-  } 
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_LimelightSubsystem.getTagWithinSight();
+    return false;
   }
 }

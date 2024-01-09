@@ -29,7 +29,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     SmartDashboard.putData("Field", m_field);
 
-    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
 
   }
 
@@ -40,8 +40,9 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public Pose2d getBotPose(){
 
-    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    double[] botPoseArray = m_limelightTable.getEntry("botpose_wpired").getDoubleArray(new double[10]); 
+
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
+    double[] botPoseArray = m_limelightTable.getEntry("botpose_wpiblue").getDoubleArray(new double[10]); 
 
     Pose2d botPose = new Pose2d(botPoseArray[0], botPoseArray[1], Rotation2d.fromDegrees(botPoseArray[5]));
 
@@ -52,16 +53,16 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public double getCurrentAprilTagId(){
-
-    double id = m_limelightTable.getEntry("tid").getDouble(0);
-
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
+    double id = m_limelightTable.getEntry("tid").getDouble(-1);
+    SmartDashboard.putNumber("Tid", id);
     return id;
 
   }
 
   public Pose2d getAprilTagDistanceRobotSpace(){
 
-    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
     double[] botPoseArray = m_limelightTable.getEntry("targetpose_robotspace").getDoubleArray(new double[10]); 
 
     Pose2d botPose = new Pose2d(botPoseArray[0], botPoseArray[1], Rotation2d.fromDegrees(botPoseArray[5]));
@@ -70,6 +71,17 @@ public class LimelightSubsystem extends SubsystemBase {
    
     return botPose;
   }
+
+  public double getTargetDistance(){
+
+    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight-reflect");
+    double[] botPoseArray = m_limelightTable.getEntry("targetpose_robotspace").getDoubleArray(new double[10]); 
+
+    double TargetDistance = botPoseArray[2];
+   
+    return TargetDistance;
+  }
+
 
   public double getTargetRotation(){
 
@@ -104,10 +116,7 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public boolean getTagWithinSight(){
-    if (getCurrentAprilTagId() == -1){
-      return false;
-    }
-    else if (getPoseDiff() <= (getTargetDegree() + 10) && getPoseDiff() >= (getTargetDegree() - 10)){
+    if (getCurrentAprilTagId() == 1){
       return true;
     }
     return false;
